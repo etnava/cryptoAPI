@@ -3,17 +3,19 @@ package com.model;
 public class Cryptocurrency {
 
 	private String id;
-	private String symbol;
-	private String name;
+	private double current_price;
+	private String market_cap;
 
 	public Cryptocurrency() {
 		super();
+		// TODO Auto-generated constructor stub
 	}
 
-	public Cryptocurrency(String id, String symbol, String name) {
+	public Cryptocurrency(String id, double current_price, String market_cap) {
+		super();
 		this.id = id;
-		this.symbol = symbol;
-		this.name = name;
+		this.current_price = current_price;
+		this.market_cap = market_cap;
 	}
 
 	public String getId() {
@@ -24,20 +26,20 @@ public class Cryptocurrency {
 		this.id = id;
 	}
 
-	public String getSymbol() {
-		return symbol;
+	public double getCurrent_price() {
+		return current_price;
 	}
 
-	public void setSymbol(String symbol) {
-		this.symbol = symbol;
+	public void setCurrent_price(double current_price) {
+		this.current_price = current_price;
 	}
 
-	public String getName() {
-		return name;
+	public String getMarket_cap() {
+		return market_cap;
 	}
 
-	public void setName(String name) {
-		this.name = name;
+	public void setMarket_cap(String market_cap) {
+		this.market_cap = market_cap;
 	}
 
 }

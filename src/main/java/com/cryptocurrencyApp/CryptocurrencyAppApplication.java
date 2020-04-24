@@ -26,6 +26,8 @@ public class CryptocurrencyAppApplication {
 	public static void main(String[] args) {
 		//SpringApplication.run(CryptocurrencyAppApplication.class, args);
 
+		
+		// Doing everything in main then will convert later.
 		ObjectMapper objectMapper = new ObjectMapper().configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 		List<Cryptocurrency> listCrypto;
 		try {

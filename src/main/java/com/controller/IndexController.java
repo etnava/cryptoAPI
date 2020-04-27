@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import com.model.Cryptocurrency;
 
+
 @Controller
 public class IndexController {
 
@@ -23,8 +24,6 @@ public class IndexController {
 		model.addAttribute("json", json);
 		return "index";
 	}
-	
-	
 	
 	// For selecting number of coins.. later..?
 	@PostMapping("/numberOfCoinsSearch")

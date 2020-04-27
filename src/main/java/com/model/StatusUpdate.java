@@ -1,39 +1,35 @@
 package com.model;
 
 public class StatusUpdate {
-	private String title;
-	private String description;
-	private String createdAt;
 
-	public StatusUpdate(String title, String description, String createdAt) {
+	String description = "";
+	String user_title = "";
+
+	public StatusUpdate(String description, String user_title) {
 		super();
-		this.title = title;
 		this.description = description;
-		this.createdAt = createdAt;
+		this.user_title = user_title;
 	}
 
-	public String getTitle() {
-		return title;
+	public StatusUpdate() {
+		super();
+		// TODO Auto-generated constructor stub
 	}
 
 	public String getDescription() {
 		return description;
 	}
 
-	public String getCreatedAt() {
-		return createdAt;
-	}
-
-	public void setTitle(String title) {
-		this.title = title;
-	}
-
 	public void setDescription(String description) {
 		this.description = description;
 	}
 
-	public void setCreatedAt(String createdAt) {
-		this.createdAt = createdAt;
+	public String getUser_title() {
+		return user_title;
+	}
+
+	public void setUser_title(String user_title) {
+		this.user_title = user_title;
 	}
 
 }

@@ -4,11 +4,13 @@ public class StatusUpdate {
 
 	String description = "";
 	String user_title = "";
+	String created_at = "";
 
-	public StatusUpdate(String description, String user_title) {
+	public StatusUpdate(String description, String user_title, String created_at) {
 		super();
 		this.description = description;
 		this.user_title = user_title;
+		this.created_at = created_at;
 	}
 
 	public StatusUpdate() {
@@ -30,6 +32,14 @@ public class StatusUpdate {
 
 	public void setUser_title(String user_title) {
 		this.user_title = user_title;
+	}
+
+	public String getCreated_at() {
+		return created_at;
+	}
+
+	public void setCreated_at(String created_at) {
+		this.created_at = created_at;
 	}
 
 }

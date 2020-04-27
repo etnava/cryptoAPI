@@ -1,10 +1,8 @@
 package com.cryptocurrencyApp;
 
-import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -18,7 +16,6 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.model.Cryptocurrency;
-import com.model.Market;
 import com.model.StatusUpdate;
 
 @ComponentScan(basePackages = { "com.controller" })
@@ -36,24 +33,34 @@ public class CryptocurrencyAppApplication {
 		List<StatusUpdate> statusUpdates;
 		final String STATUS_UPDATES = "status_updates";
 		String url = "https://api.coingecko.com/api/v3/coins/markets?vs_currency=aud&order=market_cap_desc&per_page=50&page=1&sparkline=false";
-		
+
 		try {
 			listCrypto = objectMapper.readValue(new URL(url), new TypeReference<List<Cryptocurrency>>() {
 			});
 
 			for (Cryptocurrency c : listCrypto) {
-				map = objectMapper.readValue(new URL(String.format("https://api.coingecko.com/api/v3/coins/%s/status_updates" , c.getId())), 
-						new TypeReference<Map<String, List<StatusUpdate>>>() {});
+				map = objectMapper.readValue(
+						new URL(String.format("https://api.coingecko.com/api/v3/coins/%s/status_updates", c.getId())),
+						new TypeReference<Map<String, List<StatusUpdate>>>() {
+						});
 				statusUpdates = map.get(STATUS_UPDATES);
-				System.out.println(c.getId());
-				for (StatusUpdate statusUpdate : statusUpdates) {
-					System.out.println(statusUpdate.getDescription());
-					System.out.println(statusUpdate.getUser_title());
+				c.setStatusUpdates(statusUpdates);
+
+				System.out.println("Id: " + c.getId());
+				if (c.getStatusUpdates().isEmpty()) {
+					System.out.println("Description: ");
+					System.out.println("Title: ");
+					System.out.println("Created at: ");
+				} else {
+					
+					for (StatusUpdate statusUpdate : c.getStatusUpdates()) {
+						System.out.println("Description:" + statusUpdate.getDescription());
+						System.out.println("Title: " + statusUpdate.getUser_title());
+						System.out.println("Created at :" + statusUpdate.getCreated_at());
+					}
 				}
 			}
-			
-			
-			
+
 //			for (Cryptocurrency c : listCrypto) {
 ////				StatusUpdate statusUpdate = objectMapper.readValue(new URL(String.format("https://api.coingecko.com/api/v3/coins/%s/status_updates" , c.getId())), 
 ////						new TypeReference<StatusUpdate>() {});

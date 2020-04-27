@@ -1,21 +1,25 @@
 package com.model;
 
+import java.util.List;
+
 public class Cryptocurrency {
 
 	private String id;
 	private double current_price;
 	private String market_cap;
+	private List<StatusUpdate> statusUpdates;
 
 	public Cryptocurrency() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
 
-	public Cryptocurrency(String id, double current_price, String market_cap) {
+	public Cryptocurrency(String id, double current_price, String market_cap, List<StatusUpdate> statusUpdates) {
 		super();
 		this.id = id;
 		this.current_price = current_price;
 		this.market_cap = market_cap;
+		this.statusUpdates = statusUpdates;
 	}
 
 	public String getId() {
@@ -40,6 +44,14 @@ public class Cryptocurrency {
 
 	public void setMarket_cap(String market_cap) {
 		this.market_cap = market_cap;
+	}
+
+	public List<StatusUpdate> getStatusUpdates() {
+		return statusUpdates;
+	}
+
+	public void setStatusUpdates(List<StatusUpdate> statusUpdates) {
+		this.statusUpdates = statusUpdates;
 	}
 
 }

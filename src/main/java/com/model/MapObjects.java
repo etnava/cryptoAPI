@@ -1,4 +1,4 @@
-package com.controller;
+package com.model;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -6,14 +6,14 @@ import java.net.URL;
 import java.util.List;
 import java.util.Map;
 
+import org.json.JSONObject;
+
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.model.Cryptocurrency;
-import com.model.StatusUpdate;
 
 /*
  * Handles JSON to Java Conversion and Vice Versa
@@ -30,6 +30,9 @@ public class MapObjects {
 	Map<String, List<StatusUpdate>> map;
 	List<StatusUpdate> statusUpdates;
 
+	public MapObjects() {
+	}
+	
 	public MapObjects(int numberOfCoins) {
 		this.numberOfCoins = numberOfCoins;
 		this.url = String.format(
@@ -37,10 +40,11 @@ public class MapObjects {
 				numberOfCoins);
 	}
 
-	public MapObjects() {
-	}
 
 
+	/*
+	 * Does the JSON to Java conversion
+	 */
 	public List<Cryptocurrency> convertJsonToJava() {
 		try {
 			listCrypto = objectMapper.readValue(new URL(url), new TypeReference<List<Cryptocurrency>>() {
@@ -70,8 +74,12 @@ public class MapObjects {
 		return listCrypto;
 	}
 
-	public String convertJavaToJson(List<Cryptocurrency> list) {
-		String json = "";
+	
+	/*
+	 * Used to convert it as a JSON String
+	 */
+	public String convertJavaToJsonString(List<Cryptocurrency> list) {
+		String json = null;
 		try {
 			json = objectMapper.writeValueAsString(list);
 		} catch (JsonProcessingException e) {
@@ -79,7 +87,15 @@ public class MapObjects {
 			e.printStackTrace();
 		}
 		return json;
-
+	}
+	
+	/*
+	 * Converting the JSON String as a JSON object
+	 */
+	public JSONObject convertToJsonObject(String json) {
+		JSONObject jsonObject = new JSONObject(json);
+		return jsonObject;
+		
 	}
 
 	public int getNumberOfCoins() {

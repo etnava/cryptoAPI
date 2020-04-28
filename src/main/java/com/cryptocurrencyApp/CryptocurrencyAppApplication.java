@@ -6,8 +6,8 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.ComponentScan;
 
-import com.controller.MapObjects;
 import com.model.Cryptocurrency;
+import com.model.MapObjects;
 import com.model.StatusUpdate;
 
 @ComponentScan(basePackages = { "com.controller" })

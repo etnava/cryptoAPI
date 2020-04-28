@@ -20,7 +20,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
  * 
  */
 
-public class MapObjects {
+public class Converter {
 
 	ObjectMapper objectMapper = new ObjectMapper().configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 	final String STATUS_UPDATES = "status_updates";
@@ -30,10 +30,10 @@ public class MapObjects {
 	Map<String, List<StatusUpdate>> map;
 	List<StatusUpdate> statusUpdates;
 
-	public MapObjects() {
+	public Converter() {
 	}
 	
-	public MapObjects(int numberOfCoins) {
+	public Converter(int numberOfCoins) {
 		this.numberOfCoins = numberOfCoins;
 		this.url = String.format(
 				"https://api.coingecko.com/api/v3/coins/markets?vs_currency=aud&order=market_cap_desc&per_page=%d&page=1&sparkline=false",

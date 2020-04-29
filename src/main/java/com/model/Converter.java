@@ -35,9 +35,13 @@ public class Converter {
 	
 	public Converter(int numberOfCoins) {
 		this.numberOfCoins = numberOfCoins;
-		this.url = String.format(
-				"https://api.coingecko.com/api/v3/coins/markets?vs_currency=aud&order=market_cap_desc&per_page=%d&page=1&sparkline=false",
-				numberOfCoins);
+		/*
+		 * Temp URL Because market is broken
+		 */
+		this.url = "https://api.coingecko.com/api/v3/coins/markets?vs_currency=aud&ids=bitcoin%2C%20ethereum%2C%20vechain%2C%20litecoin%2Cstellar&order=market_cap_desc&per_page=10&page=1&sparkline=false";
+//		this.url = String.format(
+//				"https://api.coingecko.com/api/v3/coins/markets?vs_currency=aud&order=market_cap_desc&per_page=%d&page=1&sparkline=false",
+//				numberOfCoins);
 	}
 
 

@@ -12,7 +12,7 @@ import com.model.Converter;
 @RestController
 public class CryptocurrencyRestController {
 
-	@GetMapping(value = "/{cryptocurrency}", produces = MediaType.APPLICATION_JSON_VALUE)
+	@GetMapping(value = "/{crypto}", produces = MediaType.APPLICATION_JSON_VALUE)
 	public List<Cryptocurrency> getCryptocurrency() {
 		int numberOfCoinsToSearch = 10;
 		Converter mapObjects = new Converter(numberOfCoinsToSearch);

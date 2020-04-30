@@ -19,7 +19,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
  * Handles JSON to Java Conversion and Vice Versa
  * 
  */
-
 public class Converter {
 
 	ObjectMapper objectMapper = new ObjectMapper().configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
@@ -32,20 +31,18 @@ public class Converter {
 
 	public Converter() {
 	}
-	
+
 	public Converter(int numberOfCoins) {
 		this.numberOfCoins = numberOfCoins;
-		
 		this.url = String.format(
 				"https://api.coingecko.com/api/v3/coins/markets?vs_currency=aud&order=market_cap_desc&per_page=%d&page=1&sparkline=false",
 				numberOfCoins);
 	}
 
-
-	
-	public List<Cryptocurrency> convertJson(){
+	public List<Cryptocurrency> convertJson() {
 		try {
-			listCrypto = objectMapper.readValue(new URL(url), new TypeReference<List<Cryptocurrency>>(){});
+			listCrypto = objectMapper.readValue(new URL(url), new TypeReference<List<Cryptocurrency>>() {
+			});
 		} catch (JsonParseException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -94,7 +91,6 @@ public class Converter {
 		return listCrypto;
 	}
 
-	
 	/*
 	 * Used to convert it as a JSON String
 	 */
@@ -108,14 +104,14 @@ public class Converter {
 		}
 		return json;
 	}
-	
+
 	/*
 	 * Converting the JSON String as a JSON object
 	 */
 	public JSONObject convertToJsonObject(String json) {
 		JSONObject jsonObject = new JSONObject(json);
 		return jsonObject;
-		
+
 	}
 
 	public int getNumberOfCoins() {
@@ -125,5 +121,15 @@ public class Converter {
 	public void setNumberOfCoins(int numberOfCoins) {
 		this.numberOfCoins = numberOfCoins;
 	}
-	
+
+	public Cryptocurrency getCryptocurrency(String id) {
+		List<Cryptocurrency> list = convertJsonToJava();
+		for (Cryptocurrency c : list) {
+			if (c.getId().equals(id)) {
+				return c;
+			}
+		}
+		return null;
+	}
+
 }

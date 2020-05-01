@@ -1,5 +1,5 @@
 FROM openjdk:latest
 ARG JAR_FILE=target/*.jar
 COPY ${JAR_FILE} app.jar
-EXPOSE 1111
+EXPOSE 5555:7777
 ENTRYPOINT ["java","-jar","/app.jar"]

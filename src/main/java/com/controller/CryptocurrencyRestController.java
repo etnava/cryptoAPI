@@ -4,27 +4,33 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletResponse;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import com.model.Cryptocurrency;
 import com.model.StatusUpdate;
+
+import repository.CryptocurrencyRepository;
+
 import com.model.Converter;
 
-@RestController
-public class CryptocurrencyRestController extends Thread{
+@RestController()
+// COMMENTS: Lets be explicit what path for this controller 
+// ( what do you mean? )
+@RequestMapping("/cryptoapi")
+public class CryptocurrencyRestController {
 
 	private final int numberOfCoinsToSearch = 10;
 	private final Converter converter = new Converter(numberOfCoinsToSearch);
-	private List<Cryptocurrency> listCrypto;
 
-	// For original API all bitcoins
+	
+	// For original API all currencies
 	@GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
 	public List<Cryptocurrency> getCryptocurrency() {
-		// Convert the JSON data from multiple APIs to list of POJOs
 		return converter.getListCrypto();
 	}
 
@@ -38,13 +44,4 @@ public class CryptocurrencyRestController extends Thread{
 		return converter.getCryptocurrency(id);
 	}
 
-	@PostMapping(path = "/add")
-	public Cryptocurrency addCoin() {
-		List<StatusUpdate> statusUpdates = null;
-		Cryptocurrency coin = new Cryptocurrency("fake", 2000, "fake", statusUpdates);
-		List<Cryptocurrency> tempList = converter.getListCrypto();
-		tempList.add(coin);
-		converter.setListCrypto(tempList);
-		return coin;
-	}
 }

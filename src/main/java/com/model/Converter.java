@@ -6,10 +6,7 @@ import java.net.URL;
 import java.util.List;
 import java.util.Map;
 
-import org.json.JSONObject;
-
 import com.fasterxml.jackson.core.JsonParseException;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JsonMappingException;
@@ -19,43 +16,30 @@ import com.fasterxml.jackson.databind.ObjectMapper;
  * Handles JSON to Java Conversion and Vice Versa
  * 
  */
+
 public class Converter {
 
-	ObjectMapper objectMapper = new ObjectMapper().configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-	final String STATUS_UPDATES = "status_updates";
-	private int numberOfCoins;
-	private String url = "";
+	private ObjectMapper objectMapper = new ObjectMapper().configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES,
+			false);
+	private final String STATUS_UPDATES = "status_updates";
+	private String url;
 	private final String COIN_MARKET_URL = "https://api.coingecko.com/api/v3/coins/markets?vs_currency=aud&order=market_cap_desc&per_page=%d&page=1&sparkline=false";
 	private final String STATUS_UPDATE_URL = "https://api.coingecko.com/api/v3/coins/%s/status_updates";
 	private List<Cryptocurrency> listCrypto;
-	Map<String, List<StatusUpdate>> map;
-	List<StatusUpdate> statusUpdates;
-
-	public Converter() {
-	}
+	private Map<String, List<StatusUpdate>> map;
+	private List<StatusUpdate> statusUpdates;
 
 	public Converter(int numberOfCoins) {
-		this.numberOfCoins = numberOfCoins;
-		this.url = String.format(
-				COIN_MARKET_URL,
-				numberOfCoins);
-		
-		/*
-		 * Does the initial conversion, before the application is spun up
-		 */
+		this.url = String.format(COIN_MARKET_URL, numberOfCoins);
 		this.listCrypto = convertJsonToJava();
 	}
 
-	/*
-	 * Handles JSON to Java Conversion
-	 */
-	public List<Cryptocurrency> convertJsonToJava() {
+	private List<Cryptocurrency> convertJsonToJava() {
 		try {
 			listCrypto = objectMapper.readValue(new URL(url), new TypeReference<List<Cryptocurrency>>() {
 			});
 			for (Cryptocurrency coin : listCrypto) {
-				map = objectMapper.readValue(new URL(
-						String.format(STATUS_UPDATE_URL, coin.getId())),
+				map = objectMapper.readValue(new URL(String.format(STATUS_UPDATE_URL, coin.getId())),
 						new TypeReference<Map<String, List<StatusUpdate>>>() {
 						});
 				statusUpdates = map.get(STATUS_UPDATES);
@@ -78,23 +62,11 @@ public class Converter {
 		return listCrypto;
 	}
 
-	public int getNumberOfCoins() {
-		return numberOfCoins;
-	}
-
-	/*
-	 * Future implementation, if we want to input a drop down to select hte number of coins to search for?
-	 */
-	
-	public void setNumberOfCoins(int numberOfCoins) {
-		this.numberOfCoins = numberOfCoins;
-	}
-
 	public List<Cryptocurrency> getListCrypto() {
 		return listCrypto;
 	}
 
-	public void setListCrypto(List<Cryptocurrency> listCrypto) {
+	private void setListCrypto(List<Cryptocurrency> listCrypto) {
 		this.listCrypto = listCrypto;
 	}
 

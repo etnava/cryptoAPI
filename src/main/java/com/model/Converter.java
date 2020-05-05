@@ -25,6 +25,8 @@ public class Converter {
 	final String STATUS_UPDATES = "status_updates";
 	private int numberOfCoins;
 	private String url = "";
+	private final String COIN_MARKET_URL = "https://api.coingecko.com/api/v3/coins/markets?vs_currency=aud&order=market_cap_desc&per_page=%d&page=1&sparkline=false";
+	private final String STATUS_UPDATE_URL = "https://api.coingecko.com/api/v3/coins/%s/status_updates";
 	private List<Cryptocurrency> listCrypto;
 	Map<String, List<StatusUpdate>> map;
 	List<StatusUpdate> statusUpdates;
@@ -35,15 +37,17 @@ public class Converter {
 	public Converter(int numberOfCoins) {
 		this.numberOfCoins = numberOfCoins;
 		this.url = String.format(
-				"https://api.coingecko.com/api/v3/coins/markets?vs_currency=aud&order=market_cap_desc&per_page=%d&page=1&sparkline=false",
+				COIN_MARKET_URL,
 				numberOfCoins);
 		
-		// NOT THE BEST WAY because what if you get new data, maybe theres a way to always be calling convertJsonToJava..?
+		/*
+		 * Does the initial conversion, before the application is spun up
+		 */
 		this.listCrypto = convertJsonToJava();
 	}
 
 	/*
-	 * Does the JSON to Java conversinn
+	 * Handles JSON to Java Conversion
 	 */
 	public List<Cryptocurrency> convertJsonToJava() {
 		try {
@@ -51,7 +55,7 @@ public class Converter {
 			});
 			for (Cryptocurrency coin : listCrypto) {
 				map = objectMapper.readValue(new URL(
-						String.format("https://api.coingecko.com/api/v3/coins/%s/status_updates", coin.getId())),
+						String.format(STATUS_UPDATE_URL, coin.getId())),
 						new TypeReference<Map<String, List<StatusUpdate>>>() {
 						});
 				statusUpdates = map.get(STATUS_UPDATES);
@@ -78,16 +82,12 @@ public class Converter {
 		return numberOfCoins;
 	}
 
+	/*
+	 * Future implementation, if we want to input a drop down to select hte number of coins to search for?
+	 */
+	
 	public void setNumberOfCoins(int numberOfCoins) {
 		this.numberOfCoins = numberOfCoins;
-	}
-
-	public String getUrl() {
-		return url;
-	}
-
-	public void setUrl(String url) {
-		this.url = url;
 	}
 
 	public List<Cryptocurrency> getListCrypto() {

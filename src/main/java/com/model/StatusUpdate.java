@@ -10,8 +10,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public @Data class StatusUpdate {
 
-	String description;
-	String user_title;
-	String created_at;
+	private String description;
+	private String user_title;
+	private String created_at;
 
 }

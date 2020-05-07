@@ -1,4 +1,4 @@
-package com.model;
+package services;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -11,13 +11,14 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.model.Cryptocurrency;
+import com.model.StatusUpdate;
 
 /*
- * Handles JSON to Java Conversion and Vice Versa
- * 
+ * Handles JSON to Java Conversion
  */
 
-public class Converter {
+public class ConverterService {
 
 	private ObjectMapper objectMapper = new ObjectMapper().configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES,
 			false);
@@ -29,7 +30,7 @@ public class Converter {
 	private Map<String, List<StatusUpdate>> map;
 	private List<StatusUpdate> statusUpdates;
 
-	public Converter(int numberOfCoins) {
+	public ConverterService(int numberOfCoins) {
 		this.url = String.format(COIN_MARKET_URL, numberOfCoins);
 		this.listCrypto = convertJsonToJava();
 	}
@@ -62,16 +63,16 @@ public class Converter {
 		return listCrypto;
 	}
 
-	public List<Cryptocurrency> getListCrypto() {
+	public List<Cryptocurrency> getAll() {
 		return listCrypto;
 	}
 
-	private void setListCrypto(List<Cryptocurrency> listCrypto) {
+	public void setListCrypto(List<Cryptocurrency> listCrypto) {
 		this.listCrypto = listCrypto;
 	}
 
 	public Cryptocurrency getCryptocurrency(String id) {
-		List<Cryptocurrency> list = getListCrypto();
+		List<Cryptocurrency> list = getAll();
 		for (Cryptocurrency c : list) {
 			if (c.getId().equals(id)) {
 				return c;

@@ -1,20 +1,9 @@
 package services;
 
-import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.client.RestTemplate;
-
-import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
@@ -40,7 +29,7 @@ public class NewConverterService {
 	private Map<String, List<StatusUpdate>> map = new HashMap<String, List<StatusUpdate>>();
 
 	public NewConverterService(int numberOfCoins) {
-		this.url = String.format(COIN_MARKET_URL, numberOfCoins);
+		setUrl(String.format(COIN_MARKET_URL, numberOfCoins));
 		this.currenciesList = getCoins();
 	}
 
@@ -84,11 +73,11 @@ public class NewConverterService {
 		return currenciesList;
 	}
 
-	public String getUrl() {
+	private String getUrl() {
 		return url;
 	}
 
-	public void setUrl(String url) {
+	private void setUrl(String url) {
 		this.url = url;
 	}
 
@@ -96,7 +85,7 @@ public class NewConverterService {
 		return currenciesList;
 	}
 
-	public void setCurrenciesList(List<Cryptocurrency> currenciesList) {
+	private void setCurrenciesList(List<Cryptocurrency> currenciesList) {
 		this.currenciesList = currenciesList;
 	}
 

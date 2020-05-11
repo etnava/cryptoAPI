@@ -1,4 +1,4 @@
-package com.controller;
+package controller;
 
 import java.util.Arrays;
 import java.util.List;
@@ -16,8 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
-import com.model.Cryptocurrency;
-
+import model.Cryptocurrency;
 import services.NewConverterService;
 
 @RestController()
@@ -57,7 +56,9 @@ public class RestTemplateController {
 		HttpHeaders headers = new HttpHeaders();
 		headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
 		HttpEntity<String> entity = new HttpEntity<String>(headers);
-		return restTemplate.exchange("https://api.coingecko.com/api/v3/coins/markets?vs_currency=aud&order=market_cap_desc&per_page=10&page=1&sparkline=false", HttpMethod.GET, entity, String.class).getBody();
+		return restTemplate.exchange(
+				"https://api.coingecko.com/api/v3/coins/markets?vs_currency=aud&order=market_cap_desc&per_page=10&page=1&sparkline=false",
+				HttpMethod.GET, entity, String.class).getBody();
 	}
 
 }

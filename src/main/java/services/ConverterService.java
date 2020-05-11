@@ -11,8 +11,9 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.model.Cryptocurrency;
-import com.model.StatusUpdate;
+
+import model.Cryptocurrency;
+import model.StatusUpdate;
 
 /*
  * Handles JSON to Java Conversion

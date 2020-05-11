@@ -1,4 +1,4 @@
-package com.cryptocurrencyApp;
+package application;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -13,8 +13,7 @@ public class CryptocurrencyAppApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(CryptocurrencyAppApplication.class, args);
 	}
-	
-	
+
 	@Bean
 	public RestTemplate getRestTemplate() {
 		return new RestTemplate();

@@ -1,4 +1,4 @@
-package com.controller;
+package controller;
 
 import java.util.List;
 
@@ -11,9 +11,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import com.model.Cryptocurrency;
-import com.model.StatusUpdate;
 
+import model.Cryptocurrency;
+import model.StatusUpdate;
 import services.ConverterService;
 
 @RestController()

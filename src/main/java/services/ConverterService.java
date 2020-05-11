@@ -1,12 +1,10 @@
 package services;
 
-import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.URL;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JsonMappingException;
@@ -21,59 +19,79 @@ import model.StatusUpdate;
 
 public class ConverterService {
 
-	private ObjectMapper objectMapper = new ObjectMapper().configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES,
-			false);
 	private final String STATUS_UPDATES = "status_updates";
-	private String url;
 	private final String COIN_MARKET_URL = "https://api.coingecko.com/api/v3/coins/markets?vs_currency=aud&order=market_cap_desc&per_page=%d&page=1&sparkline=false";
 	private final String STATUS_UPDATE_URL = "https://api.coingecko.com/api/v3/coins/%s/status_updates";
-	private List<Cryptocurrency> listCrypto;
-	private Map<String, List<StatusUpdate>> map;
-	private List<StatusUpdate> statusUpdates;
+	private ObjectMapper objectMapper = new ObjectMapper().configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES,
+			false);
+	private String url;
+	private ApiService apiServer = new ApiService();
+	private List<Cryptocurrency> currenciesList;
+	private Map<String, List<StatusUpdate>> map = new HashMap<String, List<StatusUpdate>>();
 
 	public ConverterService(int numberOfCoins) {
-		this.url = String.format(COIN_MARKET_URL, numberOfCoins);
-		this.listCrypto = convertJsonToJava();
+		setUrl(String.format(COIN_MARKET_URL, numberOfCoins));
+		this.currenciesList = getCoins();
 	}
 
-	private List<Cryptocurrency> convertJsonToJava() {
+	public List<Cryptocurrency> getCoins() {
+		String jsonCoins = apiServer.getJSON(getUrl());
 		try {
-			listCrypto = objectMapper.readValue(new URL(url), new TypeReference<List<Cryptocurrency>>() {
+			currenciesList = objectMapper.readValue(jsonCoins, new TypeReference<List<Cryptocurrency>>() {
 			});
-			for (Cryptocurrency coin : listCrypto) {
-				map = objectMapper.readValue(new URL(String.format(STATUS_UPDATE_URL, coin.getId())),
-						new TypeReference<Map<String, List<StatusUpdate>>>() {
-						});
-				statusUpdates = map.get(STATUS_UPDATES);
-				coin.setStatusUpdates(statusUpdates);
-			}
-			setListCrypto(listCrypto);
-		} catch (JsonParseException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			getCoinStatusUpdates(currenciesList);
+			setCurrenciesList(currenciesList);
 		} catch (JsonMappingException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		} catch (MalformedURLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
+		} catch (JsonProcessingException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		return listCrypto;
+
+		return currenciesList;
 	}
 
-	public List<Cryptocurrency> getAll() {
-		return listCrypto;
+	private List<Cryptocurrency> getCoinStatusUpdates(List<Cryptocurrency> currenciesList) {
+		for (Cryptocurrency currency : currenciesList) {
+			String currencyUrl = String.format(STATUS_UPDATE_URL, currency.getId());
+			String statusUpdatesJSON = apiServer.getJSON(currencyUrl);
+			try {
+				map = objectMapper.readValue(statusUpdatesJSON,
+						new TypeReference<HashMap<String, List<StatusUpdate>>>() {
+						});
+				List<StatusUpdate> statusUpdates = map.get(STATUS_UPDATES);
+				currency.setStatusUpdates(statusUpdates);
+			} catch (JsonMappingException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (JsonProcessingException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+
+		return currenciesList;
 	}
 
-	public void setListCrypto(List<Cryptocurrency> listCrypto) {
-		this.listCrypto = listCrypto;
+	private String getUrl() {
+		return url;
+	}
+
+	private void setUrl(String url) {
+		this.url = url;
+	}
+
+	public List<Cryptocurrency> getCurrenciesList() {
+		return currenciesList;
+	}
+
+	private void setCurrenciesList(List<Cryptocurrency> currenciesList) {
+		this.currenciesList = currenciesList;
 	}
 
 	public Cryptocurrency getCryptocurrency(String id) {
-		List<Cryptocurrency> list = getAll();
+		List<Cryptocurrency> list = getCurrenciesList();
 		for (Cryptocurrency c : list) {
 			if (c.getId().equals(id)) {
 				return c;
@@ -81,5 +99,4 @@ public class ConverterService {
 		}
 		return null;
 	}
-
 }

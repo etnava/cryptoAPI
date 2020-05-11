@@ -14,14 +14,14 @@ import org.springframework.web.bind.annotation.RestController;
 
 import model.Cryptocurrency;
 import model.StatusUpdate;
-import services.ConverterService;
+import services.OldService;
 
 @RestController()
 @RequestMapping("/cryptoapi")
-public class CryptocurrencyRestController {
+public class OldController {
 
 	private final int numberOfCoinsToSearch = 10;
-	private final ConverterService converter = new ConverterService(numberOfCoinsToSearch);
+	private final OldService converter = new OldService(numberOfCoinsToSearch);
 
 	
 	// For original API all currencies

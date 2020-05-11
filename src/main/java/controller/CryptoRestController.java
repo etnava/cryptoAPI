@@ -17,17 +17,17 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
 import model.Cryptocurrency;
-import services.NewConverterService;
+import services.ConverterService;
 
 @RestController()
 @RequestMapping("/api")
-public class RestTemplateController {
+public class CryptoRestController {
 
 	@Autowired
 	RestTemplate restTemplate;
 
 	private final int numOfCoins = 10;
-	private final NewConverterService converterService = new NewConverterService(numOfCoins);
+	private final ConverterService converterService = new ConverterService(numOfCoins);
 
 	@GetMapping(path = "/allcoins", produces = MediaType.APPLICATION_JSON_VALUE)
 	public List<Cryptocurrency> getList() {

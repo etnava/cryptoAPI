@@ -51,6 +51,12 @@ public class RestTemplateController {
 		return getList();
 	}
 
+	
+	/*
+	 * 
+	 * For testing purposes, testing Consume
+	 * 
+	 */
 	@RequestMapping(value = "/consume")
 	public String getApiList() {
 		HttpHeaders headers = new HttpHeaders();

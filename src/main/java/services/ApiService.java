@@ -13,6 +13,10 @@ public class ApiService {
 	public ApiService() {
 	}
 
+	
+	/*
+	 * Gets the whole object and returns complete object as a STRING
+	 */
 	public String getJSON(String url) {
 		return restTemplate.getForObject(url, String.class);
 	}

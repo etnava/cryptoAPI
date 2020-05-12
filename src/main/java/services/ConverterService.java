@@ -37,6 +37,9 @@ public class ConverterService {
 	public List<Cryptocurrency> getCoins() {
 		String jsonCoins = apiServer.getJSON(getUrl());
 		try {
+			/*
+			 * Uses objectMapper to read the value of JSON and return as a list
+			 */
 			currenciesList = objectMapper.readValue(jsonCoins, new TypeReference<List<Cryptocurrency>>() {
 			});
 			getCoinStatusUpdates(currenciesList);
@@ -57,6 +60,9 @@ public class ConverterService {
 			String currencyUrl = String.format(STATUS_UPDATE_URL, currency.getId());
 			String statusUpdatesJSON = apiServer.getJSON(currencyUrl);
 			try {
+				/*
+				 * Uses object mapper to read the JSON, and return as a map
+				 */
 				map = objectMapper.readValue(statusUpdatesJSON,
 						new TypeReference<HashMap<String, List<StatusUpdate>>>() {
 						});

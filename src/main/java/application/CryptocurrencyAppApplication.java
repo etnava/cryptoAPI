@@ -18,4 +18,5 @@ public class CryptocurrencyAppApplication {
 	public RestTemplate getRestTemplate() {
 		return new RestTemplate();
 	}
+
 }

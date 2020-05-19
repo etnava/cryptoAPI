@@ -7,7 +7,7 @@ import static org.hamcrest.Matchers.*;
 
 public class RestfulApiTest {
 
-	@Before
+	@BeforeClass
 	public void init() {
 		baseURI = "http://localhost:1111/api";
 	}

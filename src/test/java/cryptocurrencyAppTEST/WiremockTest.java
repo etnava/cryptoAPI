@@ -49,6 +49,10 @@ public class WiremockTest {
 		stubFor(get(urlPathMatching("/.*")).willReturn(aResponse().withStatus(400)));
 	}
 
+	/*
+	 * Tests
+	 */
+
 	@Test
 	public void testAllCoins() {
 
@@ -60,6 +64,9 @@ public class WiremockTest {
 		ResponseEntity<String> response = restTemplate.getForEntity(resourceUrl + "/allcoins", String.class);
 //		3. Verify
 		assertNotNull(response);
+		/*
+		 * response.getStatusCodeValue(); For statuscode Value
+		 */
 		assertTrue("Status code not equal to 200", response.getStatusCode().equals(HttpStatus.OK));
 		assertTrue("Contains fail", response.getBody().contains("\"id\":\"bitcoin\""));
 	}

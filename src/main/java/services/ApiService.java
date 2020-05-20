@@ -12,7 +12,6 @@ public class ApiService {
 
 	public ApiService() {
 	}
-
 	
 	/*
 	 * Gets the whole object then parses back as a string.

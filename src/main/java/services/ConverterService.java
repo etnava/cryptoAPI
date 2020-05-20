@@ -25,7 +25,7 @@ public class ConverterService {
 	private ObjectMapper objectMapper = new ObjectMapper().configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES,
 			false);
 	private String url;
-	private ApiService apiServer = new ApiService();
+	private ApiService apiService = new ApiService();
 	private List<Cryptocurrency> currenciesList;
 	private Map<String, List<StatusUpdate>> map = new HashMap<String, List<StatusUpdate>>();
 
@@ -35,7 +35,7 @@ public class ConverterService {
 	}
 
 	public List<Cryptocurrency> getCoins() {
-		String jsonCoins = apiServer.getJSON(getUrl());
+		String jsonCoins = apiService.getJSON(getUrl());
 		try {
 			/*
 			 * Uses objectMapper to read the value of JSON and return as a list
@@ -58,7 +58,7 @@ public class ConverterService {
 	private List<Cryptocurrency> getCoinStatusUpdates(List<Cryptocurrency> currenciesList) {
 		for (Cryptocurrency currency : currenciesList) {
 			String currencyUrl = String.format(STATUS_UPDATE_URL, currency.getId());
-			String statusUpdatesJSON = apiServer.getJSON(currencyUrl);
+			String statusUpdatesJSON = apiService.getJSON(currencyUrl);
 			try {
 				/*
 				 * Uses object mapper to read the JSON, and return as a map

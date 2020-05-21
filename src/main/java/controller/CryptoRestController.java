@@ -39,7 +39,7 @@ public class CryptoRestController {
 	public Cryptocurrency getCryptocurrency(@PathVariable String id, HttpServletResponse response) {
 		Cryptocurrency crypto = converterService.getCryptocurrency(id);
 		if (crypto == null) {
-			response.setStatus(400);
+			response.setStatus(404);
 		}
 		return converterService.getCryptocurrency(id);
 	}
@@ -47,7 +47,7 @@ public class CryptoRestController {
 	// Update Current List of Cryptocurrency
 	@GetMapping("/update")
 	public List<Cryptocurrency> getUpdate() {
-		converterService.getCoins();
+		converterService.updateList();
 		return getList();
 	}
 

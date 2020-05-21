@@ -31,23 +31,22 @@ public class ConverterService {
 
 	public ConverterService(int numberOfCoins) {
 		setUrl(String.format(COIN_MARKET_URL, numberOfCoins));
-		this.currenciesList = getCoins();
+		convertJsonToJava();
 	}
 
-	
+	public void updateList() {
+		convertJsonToJava();
+	}
 
-	public List<Cryptocurrency> getCoins() {
-	
-		// Use APIService to get JSON string of target url
+	private void convertJsonToJava() {
 		String jsonCoins = apiService.getJSON(getUrl());
 		try {
-			// Use ObjectMapper to get the List of Cryptocurrency
-			currenciesList = objectMapper.readValue(jsonCoins, new TypeReference<List<Cryptocurrency>>() {
-			});
-			// Update the existing currencies list with the coin list with status updates.
-			currenciesList = getCoinStatusUpdates(currenciesList);
-			// Update this currencies list
-			setCurrenciesList(currenciesList);
+			// Initial Set Currencies list (No status Updates)
+			setCurrenciesList(objectMapper.readValue(jsonCoins, new TypeReference<List<Cryptocurrency>>() {
+			}));
+			
+			// Replace Currencies list with 
+			setCurrenciesList(updateCoinStatuses(getCurrenciesList()));
 		} catch (JsonMappingException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -55,17 +54,16 @@ public class ConverterService {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-
-		return currenciesList;
 	}
 
-	private List<Cryptocurrency> getCoinStatusUpdates(List<Cryptocurrency> currenciesList) {
+	private List<Cryptocurrency> updateCoinStatuses(List<Cryptocurrency> currenciesList) {
 		for (Cryptocurrency currency : currenciesList) {
 			String currencyUrl = String.format(STATUS_UPDATE_URL, currency.getId());
 			String statusUpdatesJSON = apiService.getJSON(currencyUrl);
 			try {
 				/*
-				 * Object Mapper to return a hashmap with a list of status updates for each currency
+				 * Object Mapper to return a hashmap with a list of status updates for each
+				 * currency
 				 */
 				map = objectMapper.readValue(statusUpdatesJSON,
 						new TypeReference<HashMap<String, List<StatusUpdate>>>() {

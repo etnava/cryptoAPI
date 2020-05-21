@@ -14,7 +14,7 @@ public class ApiService {
 	}
 	
 	/*
-	 * Gets the whole object then parses back as a string.
+	 * Converts the API url as a String
 	 */
 	public String getJSON(String url) {
 		return restTemplate.getForObject(url, String.class);

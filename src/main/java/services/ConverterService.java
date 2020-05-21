@@ -34,15 +34,19 @@ public class ConverterService {
 		this.currenciesList = getCoins();
 	}
 
+	
+
 	public List<Cryptocurrency> getCoins() {
+	
+		// Use APIService to get JSON string of target url
 		String jsonCoins = apiService.getJSON(getUrl());
 		try {
-			/*
-			 * Uses objectMapper to read the value of JSON and return as a list
-			 */
+			// Use ObjectMapper to get the List of Cryptocurrency
 			currenciesList = objectMapper.readValue(jsonCoins, new TypeReference<List<Cryptocurrency>>() {
 			});
-			getCoinStatusUpdates(currenciesList);
+			// Update the existing currencies list with the coin list with status updates.
+			currenciesList = getCoinStatusUpdates(currenciesList);
+			// Update this currencies list
 			setCurrenciesList(currenciesList);
 		} catch (JsonMappingException e) {
 			// TODO Auto-generated catch block
@@ -61,11 +65,12 @@ public class ConverterService {
 			String statusUpdatesJSON = apiService.getJSON(currencyUrl);
 			try {
 				/*
-				 * Uses object mapper to read the JSON, and return as a map
+				 * Object Mapper to return a hashmap with a list of status updates for each currency
 				 */
 				map = objectMapper.readValue(statusUpdatesJSON,
 						new TypeReference<HashMap<String, List<StatusUpdate>>>() {
 						});
+				// Get map with key
 				List<StatusUpdate> statusUpdates = map.get(STATUS_UPDATES);
 				currency.setStatusUpdates(statusUpdates);
 			} catch (JsonMappingException e) {

@@ -54,7 +54,7 @@ public class CryptoRestController {
 	
 	/*
 	 * 
-	 * For testing, purposes, using consume with rest template.
+	 * Used to test consume on restTemplate
 	 * 
 	 */
 	@RequestMapping(value = "/consume")

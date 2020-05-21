@@ -3,13 +3,11 @@ package services;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-
 import model.Cryptocurrency;
 import model.StatusUpdate;
 
@@ -45,7 +43,7 @@ public class ConverterService {
 			setCurrenciesList(objectMapper.readValue(jsonCoins, new TypeReference<List<Cryptocurrency>>() {
 			}));
 			
-			// Replace Currencies list with 
+			// Replace current currencies list with updated currencies list with status updates
 			setCurrenciesList(updateCoinStatuses(getCurrenciesList()));
 		} catch (JsonMappingException e) {
 			// TODO Auto-generated catch block
@@ -79,7 +77,6 @@ public class ConverterService {
 				e.printStackTrace();
 			}
 		}
-
 		return currenciesList;
 	}
 

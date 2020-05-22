@@ -8,6 +8,8 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+
+import client.ApiClient;
 import model.Cryptocurrency;
 import model.StatusUpdate;
 
@@ -15,20 +17,20 @@ import model.StatusUpdate;
  * Handles JSON to Java Conversion
  */
 
-public class ConverterService {
+public class CoinService { // Renamed to coin service, call it the resouce that you are servicing.
 
 	private final String STATUS_UPDATES = "status_updates";
-	private final String COIN_MARKET_URL = "https://api.coingecko.com/api/v3/coins/markets?vs_currency=aud&order=market_cap_desc&per_page=%d&page=1&sparkline=false";
-	private final String STATUS_UPDATE_URL = "https://api.coingecko.com/api/v3/coins/%s/status_updates";
+	private final String COIN_MARKET_URL = "https://api.coingecko.com/api/v3/coins/markets?vs_currency=aud&order=market_cap_desc&per_page=%d&page=1&sparkline=false"; // Move to Client
+	private final String STATUS_UPDATE_URL = "https://api.coingecko.com/api/v3/coins/%s/status_updates"; // Move to Client
 	private ObjectMapper objectMapper = new ObjectMapper().configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES,
-			false);
+			false); // Move to Client
 	private String url;
-	private ApiService apiService = new ApiService();
-	private List<Cryptocurrency> currenciesList;
-	private Map<String, List<StatusUpdate>> map = new HashMap<String, List<StatusUpdate>>();
-
-	public ConverterService(int numberOfCoins) {
-		setUrl(String.format(COIN_MARKET_URL, numberOfCoins));
+	private ApiClient apiService = new ApiClient(); // Rename it to client, need one for each call. Handles with Services handles communication. // 21->26
+	private List<Cryptocurrency> currenciesList; // Removed 
+	private Map<String, List<StatusUpdate>> map = new HashMap<String, List<StatusUpdate>>(); // getAll, coin.geckoclient getStatusUpdates getCoins
+// GetAll Function to call both API
+	public CoinService(int numberOfCoins) {
+		setUrl(String.format(COIN_MARKET_URL, numberOfCoins)); // Moved to client, Use Autowired on client
 		convertJsonToJava();
 	}
 
@@ -36,8 +38,8 @@ public class ConverterService {
 		convertJsonToJava();
 	}
 
-	private void convertJsonToJava() {
-		String jsonCoins = apiService.getJSON(getUrl());
+	private void convertJsonToJava() { // Get All Coins and Get ID
+		String jsonCoins = apiService.getJSON(getUrl()); // do it client.getCoins pass coins here return, Client has to return Java File type
 		try {
 			// Initial Set Currencies list (No status Updates)
 			setCurrenciesList(objectMapper.readValue(jsonCoins, new TypeReference<List<Cryptocurrency>>() {

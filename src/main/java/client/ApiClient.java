@@ -1,4 +1,4 @@
-package services;
+package client;
 
 import org.springframework.web.client.RestTemplate;
 
@@ -6,11 +6,11 @@ import org.springframework.web.client.RestTemplate;
  * Handles API Calling, gets the JSON Data
  */
 
-public class ApiService {
+public class ApiClient {
 
 	private RestTemplate restTemplate = new RestTemplate();
 
-	public ApiService() {
+	public ApiClient() {
 	}
 	
 	/*

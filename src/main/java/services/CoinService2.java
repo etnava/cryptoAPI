@@ -17,7 +17,7 @@ import model.StatusUpdate;
  * Handles JSON to Java Conversion
  */
 
-public class CoinService { // Renamed to coin service, call it the resouce that you are servicing.
+public class CoinService2 { // Renamed to coin service, call it the resouce that you are servicing.
 
 	private final String STATUS_UPDATES = "status_updates";
 	private final String COIN_MARKET_URL = "https://api.coingecko.com/api/v3/coins/markets?vs_currency=aud&order=market_cap_desc&per_page=%d&page=1&sparkline=false"; // Move to Client
@@ -29,7 +29,7 @@ public class CoinService { // Renamed to coin service, call it the resouce that 
 	private List<Cryptocurrency> currenciesList; // Removed 
 	private Map<String, List<StatusUpdate>> map = new HashMap<String, List<StatusUpdate>>(); // getAll, coin.geckoclient getStatusUpdates getCoins
 // GetAll Function to call both API
-	public CoinService(int numberOfCoins) {
+	public CoinService2(int numberOfCoins) {
 		setUrl(String.format(COIN_MARKET_URL, numberOfCoins)); // Moved to client, Use Autowired on client
 		convertJsonToJava();
 	}

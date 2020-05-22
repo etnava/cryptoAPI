@@ -12,27 +12,23 @@ import org.springframework.web.bind.annotation.RestController;
 
 import model.Cryptocurrency;
 import services.CoinService;
+import services.CoinService2;
 
 @RestController()
 @RequestMapping("/coins")
 public class CryptoRestController2 {
 
 	@Autowired
-	CoinService service;
-	
-	private final int numOfCoins = 10; // Should be part of getCryptocurrency
-	private final CoinService converterService = new CoinService(numOfCoins); // Use Autowired, @spring context ,
-																				// dependency injection spring
+	CoinService2 service;
 
-	@GetMapping // remove all coins make it all dont need to specify produces
 	public List<Cryptocurrency> getAllCoins() {
-		return converterService.getCurrenciesList(); // include number of coins in the server
+		return service.getEverything();
 	}
 
 	// Getting the mapping for by ID
 	@GetMapping(path = "/{id}") // dont need to specify produces
 	public Cryptocurrency getCoin(@PathVariable String id, HttpServletResponse response) {
-		Cryptocurrency crypto = converterService.getCryptocurrency(id);
+		Cryptocurrency crypto = service.getCryptocurrency(id);
 		if (crypto == null) {
 			response.setStatus(404);
 		}

@@ -16,9 +16,6 @@ public class CoinService { // Renamed to coin service, call it the resouce that 
 	@Autowired
 	CoinGeckoClient client;
 
-	// Num coins is set in Bean on application
-	
-	
 	public CoinService() {
 	}
 

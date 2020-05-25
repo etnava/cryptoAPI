@@ -11,7 +11,7 @@ import model.Cryptocurrency;
  * Handles JSON to Java Conversion
  */
 
-public class CoinService { // Renamed to coin service, call it the resouce that you are servicing.
+public class CoinService { 
 
 	@Autowired
 	CoinGeckoClient client;
@@ -19,12 +19,20 @@ public class CoinService { // Renamed to coin service, call it the resouce that 
 	public CoinService() {
 	}
 
-	public List<Cryptocurrency> getCurrenciesList() {
-		// Set how many coins to search for
-		return client.getCoins(10);
+	public List<Cryptocurrency> getAllCoins() {
+		List<Cryptocurrency> currencies = client.getCoinGeckoCoinsAPI(10);
+		for (Cryptocurrency c : currencies) {
+			c.setStatusUpdates(client.getStatusUpdates(client.getCoinGeckoStatusUpdateMapAPI(c)));
+		}
+		return currencies;
 	}
 
 	public Cryptocurrency getCoin(String id) {
-		return client.getCoin(id);
+		Cryptocurrency c = client.getCoinGeckoCoinAPI(id);
+		if (c == null) {
+			return null;
+		}
+		c.setStatusUpdates(client.getStatusUpdates(client.getCoinGeckoStatusUpdateMapAPI(c)));
+		return c;
 	}
 }

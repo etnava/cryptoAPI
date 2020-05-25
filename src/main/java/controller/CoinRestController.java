@@ -18,18 +18,18 @@ import services.CoinService;
 public class CoinRestController {
 
 	@Autowired
-	CoinService service;
+	CoinService coinService;
 
 	@GetMapping
 	public List<Cryptocurrency> getAllCoins() {
-		return service.getCurrenciesList();
+		return coinService.getAllCoins();
 	}
 
 	@GetMapping(path = "/{id}")
 	public Cryptocurrency getCoin(@PathVariable String id, HttpServletResponse response) {
-		if (service.getCoin(id) == null) {
+		if (coinService.getCoin(id) == null) {
 			response.setStatus(404);
 		}
-		return service.getCoin(id);
+		return coinService.getCoin(id);
 	}
 }

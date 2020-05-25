@@ -1,4 +1,4 @@
-package application;
+
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -10,8 +10,7 @@ import client.CoinGeckoClient;
 import services.CoinService;
 import services.CoinService;
 
-// Remove And move to root folder remove basepackages.
-@ComponentScan(basePackages = { "controller" })
+@ComponentScan(basePackages = {"controller"})
 @SpringBootApplication
 public class CryptocurrencyAppApplication {
 
@@ -26,12 +25,12 @@ public class CryptocurrencyAppApplication {
 
 
 	@Bean
-	public CoinService coinService() {
+	public CoinService getCoinService() {
 		return new CoinService();
 	}
 
 	@Bean
-	public CoinGeckoClient client() {
+	public CoinGeckoClient getCoinGeckoClient() {
 		return new CoinGeckoClient();
 	}
 }

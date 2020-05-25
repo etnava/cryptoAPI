@@ -6,6 +6,7 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletResponse;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.client.RestTemplate;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -23,78 +24,79 @@ import model.StatusUpdate;
 
 public class CoinGeckoClient {
 
-	private RestTemplate restTemplate = new RestTemplate();
-	private final String STATUS_UPDATES = "status_updates";
-	private final String COIN_MARKET_URL = "https://api.coingecko.com/api/v3/coins/markets?vs_currency=aud&order=market_cap_desc&per_page=%d&page=1&sparkline=false";
+	@Autowired
+	RestTemplate restTemplate;
+
+	private final String STATUS_UPDATE_KEY = "status_updates";
+	private final String SINGLE_COIN_URL = "https://api.coingecko.com/api/v3/coins/markets?vs_currency=aud&ids=%s&order=market_cap_desc&per_page=100&page=1&sparkline=false";
+	private final String MULTIPLE_COINS_URL = "https://api.coingecko.com/api/v3/coins/markets?vs_currency=aud&order=market_cap_desc&per_page=%d&page=1&sparkline=false";
 	private final String STATUS_UPDATE_URL = "https://api.coingecko.com/api/v3/coins/%s/status_updates";
 	private ObjectMapper objectMapper = new ObjectMapper().configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES,
 			false);
-	private List<Cryptocurrency> currenciesList;
-
-	public List<Cryptocurrency> getCurrenciesList() {
-		return currenciesList;
-	}
-
-	public void setCurrenciesList(List<Cryptocurrency> currenciesList) {
-		this.currenciesList = currenciesList;
-	}
-
-	private Map<String, List<StatusUpdate>> map = new HashMap<String, List<StatusUpdate>>(); // getAll, coin.geckoclient
-																								// getStatusUpdates
-																								// getCoins
-	// GetAll Function to call both API
 
 	public CoinGeckoClient() {
 	}
 
-	public List<Cryptocurrency> getCoins(int numCoins) {
-		String coinsURL = String.format(COIN_MARKET_URL, numCoins);
+	// Gets Coin Gecko Coins API
+	public List<Cryptocurrency> getCoinGeckoCoinsAPI(int numCoins) {
+		String coinsURL = String.format(MULTIPLE_COINS_URL, numCoins);
 		String JSON = getJSON(coinsURL);
+		List<Cryptocurrency> currenciesList = null;
 		try {
-			setCurrenciesList(objectMapper.readValue(JSON, new TypeReference<List<Cryptocurrency>>() {
-			}));
-			updateCoinStatuses();
+			currenciesList = objectMapper.readValue(JSON, new TypeReference<List<Cryptocurrency>>() {
+			});
 		} catch (JsonMappingException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (JsonProcessingException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		return getCurrenciesList();
+		return currenciesList;
 	}
 
-	private void updateCoinStatuses() {
-		for (Cryptocurrency currency : getCurrenciesList()) {
-			String currencyURL = String.format(STATUS_UPDATE_URL, currency.getId());
-			String updateJSON = getJSON(currencyURL);
-
-			try {
-				map = objectMapper.readValue(updateJSON, new TypeReference<HashMap<String, List<StatusUpdate>>>() {
-				});
-				List<StatusUpdate> statusUpdates = map.get(STATUS_UPDATES);
-				currency.setStatusUpdates(statusUpdates);
-			} catch (JsonMappingException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (JsonProcessingException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+	// Return a Map object from the COIN GECKO API for Status Updates
+	public Map<String, List<StatusUpdate>> getCoinGeckoStatusUpdateMapAPI(Cryptocurrency currency) {
+		String currencyURL = String.format(STATUS_UPDATE_URL, currency.getId());
+		String statusUpdateJSON = getJSON(currencyURL);
+		Map<String, List<StatusUpdate>> map = null;
+		try {
+			map = objectMapper.readValue(statusUpdateJSON, new TypeReference<HashMap<String, List<StatusUpdate>>>() {
+			});
+		} catch (JsonMappingException e) {
+			e.printStackTrace();
+		} catch (JsonProcessingException e) {
+			e.printStackTrace();
 		}
+		return map;
 	}
 
-	public String getJSON(String url) {
+	// Parse through map to get the individual status updates
+	public List<StatusUpdate> getStatusUpdates(Map<String, List<StatusUpdate>> map){
+		return map.get(STATUS_UPDATE_KEY);
+	}
+	
+	
+	// Gets Coin Gecko coin api for single coin
+	public Cryptocurrency getCoinGeckoCoinAPI(String id) {
+		String coinURL = String.format(SINGLE_COIN_URL, id);
+		String coinJSON = getJSON(coinURL);
+		Cryptocurrency c = null;
+		List<Cryptocurrency> list = null;
+		//
+		try {
+			list = objectMapper.readValue(coinJSON,  new TypeReference<List<Cryptocurrency>>() {});
+			if (list.isEmpty()) 
+				return null;
+			c = list.get(0);
+		} catch (JsonMappingException e) {
+			e.printStackTrace();
+		} catch (JsonProcessingException e) {
+			e.printStackTrace();
+		}
+		return c;
+	}
+
+	private String getJSON(String url) {
 		return restTemplate.getForObject(url, String.class);
-	}
-
-	public Cryptocurrency getCoin(String id) {
-		for (Cryptocurrency cryptocurrency : getCurrenciesList()) {
-			if (cryptocurrency.getId().equals(id)) {
-				return cryptocurrency;
-			}
-		}
-		return null;
 	}
 
 }

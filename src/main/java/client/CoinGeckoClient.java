@@ -70,11 +70,10 @@ public class CoinGeckoClient {
 	}
 
 	// Parse through map to get the individual status updates
-	public List<StatusUpdate> getStatusUpdates(Map<String, List<StatusUpdate>> map){
+	public List<StatusUpdate> getStatusUpdates(Map<String, List<StatusUpdate>> map) {
 		return map.get(STATUS_UPDATE_KEY);
 	}
-	
-	
+
 	// Gets Coin Gecko coin api for single coin
 	public Cryptocurrency getCoinGeckoCoinAPI(String id) {
 		String coinURL = String.format(SINGLE_COIN_URL, id);
@@ -83,8 +82,9 @@ public class CoinGeckoClient {
 		List<Cryptocurrency> list = null;
 		//
 		try {
-			list = objectMapper.readValue(coinJSON,  new TypeReference<List<Cryptocurrency>>() {});
-			if (list.isEmpty()) 
+			list = objectMapper.readValue(coinJSON, new TypeReference<List<Cryptocurrency>>() {
+			});
+			if (list.isEmpty())
 				return null;
 			c = list.get(0);
 		} catch (JsonMappingException e) {

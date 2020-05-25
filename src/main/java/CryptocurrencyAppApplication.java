@@ -1,5 +1,4 @@
 
-
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
@@ -10,7 +9,7 @@ import client.CoinGeckoClient;
 import services.CoinService;
 import services.CoinService;
 
-@ComponentScan(basePackages = {"controller"})
+@ComponentScan(basePackages = { "controller" })
 @SpringBootApplication
 public class CryptocurrencyAppApplication {
 
@@ -22,7 +21,6 @@ public class CryptocurrencyAppApplication {
 	public RestTemplate getRestTemplate() {
 		return new RestTemplate();
 	}
-
 
 	@Bean
 	public CoinService getCoinService() {

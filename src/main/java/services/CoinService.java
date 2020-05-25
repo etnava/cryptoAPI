@@ -11,7 +11,7 @@ import model.Cryptocurrency;
  * Handles JSON to Java Conversion
  */
 
-public class CoinService { 
+public class CoinService {
 
 	@Autowired
 	CoinGeckoClient client;

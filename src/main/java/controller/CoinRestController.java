@@ -12,27 +12,24 @@ import org.springframework.web.bind.annotation.RestController;
 
 import model.Cryptocurrency;
 import services.CoinService;
-import services.CoinService2;
 
 @RestController()
 @RequestMapping("/coins")
-public class CryptoRestController2 {
+public class CoinRestController {
 
 	@Autowired
-	CoinService2 service;
+	CoinService service;
 
+	@GetMapping
 	public List<Cryptocurrency> getAllCoins() {
-		return service.getEverything();
+		return service.getCurrenciesList();
 	}
 
-	// Getting the mapping for by ID
-	@GetMapping(path = "/{id}") // dont need to specify produces
+	@GetMapping(path = "/{id}")
 	public Cryptocurrency getCoin(@PathVariable String id, HttpServletResponse response) {
-		Cryptocurrency crypto = service.getCryptocurrency(id);
-		if (crypto == null) {
+		if (service.getCoin(id) == null) {
 			response.setStatus(404);
 		}
-		return crypto;
+		return service.getCoin(id);
 	}
-
 }

@@ -40,10 +40,10 @@ public class CoinGeckoClient {
 	// Gets Coin Gecko Coins API
 	public List<Cryptocurrency> getCoinGeckoCoinsAPI(int numCoins) {
 		String coinsURL = String.format(MULTIPLE_COINS_URL, numCoins);
-		String JSON = getJSON(coinsURL);
+		String allCoinsJSON = getJSON(coinsURL);
 		List<Cryptocurrency> currenciesList = null;
 		try {
-			currenciesList = objectMapper.readValue(JSON, new TypeReference<List<Cryptocurrency>>() {
+			currenciesList = objectMapper.readValue(allCoinsJSON, new TypeReference<List<Cryptocurrency>>() {
 			});
 		} catch (JsonMappingException e) {
 			e.printStackTrace();
@@ -78,25 +78,21 @@ public class CoinGeckoClient {
 	public Cryptocurrency getCoinGeckoCoinAPI(String id) {
 		String coinURL = String.format(SINGLE_COIN_URL, id);
 		String coinJSON = getJSON(coinURL);
-		Cryptocurrency c = null;
-		List<Cryptocurrency> list = null;
 		//
 		try {
-			list = objectMapper.readValue(coinJSON, new TypeReference<List<Cryptocurrency>>() {
+			List<Cryptocurrency> list = objectMapper.readValue(coinJSON, new TypeReference<List<Cryptocurrency>>() {
 			});
-			if (list.isEmpty())
-				return null;
-			c = list.get(0);
+			Cryptocurrency c = list.get(0);
+			return c;
 		} catch (JsonMappingException e) {
 			e.printStackTrace();
 		} catch (JsonProcessingException e) {
 			e.printStackTrace();
 		}
-		return c;
+		return null;
 	}
 
-	private String getJSON(String url) {
+	public String getJSON(String url) {
 		return restTemplate.getForObject(url, String.class);
 	}
-
 }

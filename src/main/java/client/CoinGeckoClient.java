@@ -1,5 +1,6 @@
 package client;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -27,12 +28,13 @@ public class CoinGeckoClient {
 	@Autowired
 	RestTemplate restTemplate;
 
+	@Autowired
+	ObjectMapper objectMapper;
+
 	private final String STATUS_UPDATE_KEY = "status_updates";
 	private final String SINGLE_COIN_URL = "https://api.coingecko.com/api/v3/coins/markets?vs_currency=aud&ids=%s&order=market_cap_desc&per_page=100&page=1&sparkline=false";
 	private final String MULTIPLE_COINS_URL = "https://api.coingecko.com/api/v3/coins/markets?vs_currency=aud&order=market_cap_desc&per_page=%d&page=1&sparkline=false";
 	private final String STATUS_UPDATE_URL = "https://api.coingecko.com/api/v3/coins/%s/status_updates";
-	private ObjectMapper objectMapper = new ObjectMapper().configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES,
-			false);
 
 	public CoinGeckoClient() {
 	}
@@ -54,10 +56,10 @@ public class CoinGeckoClient {
 	}
 
 	// Return a Map object from the COIN GECKO API for Status Updates
-	public Map<String, List<StatusUpdate>> getCoinGeckoStatusUpdateMapAPI(Cryptocurrency currency) {
+	public HashMap<String, List<StatusUpdate>> getCoinGeckoStatusUpdateMapAPI(Cryptocurrency currency) {
 		String currencyURL = String.format(STATUS_UPDATE_URL, currency.getId());
 		String statusUpdateJSON = getJSON(currencyURL);
-		Map<String, List<StatusUpdate>> map = null;
+		HashMap<String, List<StatusUpdate>> map = null;
 		try {
 			map = objectMapper.readValue(statusUpdateJSON, new TypeReference<HashMap<String, List<StatusUpdate>>>() {
 			});
@@ -77,19 +79,20 @@ public class CoinGeckoClient {
 	// Gets Coin Gecko coin api for single coin
 	public Cryptocurrency getCoinGeckoCoinAPI(String id) {
 		String coinURL = String.format(SINGLE_COIN_URL, id);
-		String coinJSON = getJSON(coinURL);
-		//
+//		String coinJSON = getJSON(coinURL);
+		String coinJSON = restTemplate.getForObject(coinURL, String.class);
+		List<Cryptocurrency> list = new ArrayList<Cryptocurrency>();
+		Cryptocurrency c = new Cryptocurrency();
 		try {
-			List<Cryptocurrency> list = objectMapper.readValue(coinJSON, new TypeReference<List<Cryptocurrency>>() {
+			list = objectMapper.readValue(coinJSON, new TypeReference<List<Cryptocurrency>>() {
 			});
-			Cryptocurrency c = list.get(0);
-			return c;
+			c = list.get(0);
 		} catch (JsonMappingException e) {
 			e.printStackTrace();
 		} catch (JsonProcessingException e) {
 			e.printStackTrace();
 		}
-		return null;
+		return c;
 	}
 
 	public String getJSON(String url) {

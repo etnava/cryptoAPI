@@ -7,7 +7,6 @@ import org.springframework.web.client.RestTemplate;
 
 import client.CoinGeckoClient;
 import services.CoinService;
-import services.CoinService;
 
 @ComponentScan(basePackages = { "controller" })
 @SpringBootApplication

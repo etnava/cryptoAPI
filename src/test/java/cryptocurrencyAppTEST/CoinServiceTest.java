@@ -3,8 +3,6 @@ package cryptocurrencyAppTEST;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.servlet.http.HttpServletResponse;
-
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
 
@@ -21,17 +19,15 @@ import services.CoinService;
 
 public class CoinServiceTest {
 
-
-
 	@Mock
 	CoinGeckoClient mockClient;
-	
+
 	@Mock
 	Cryptocurrency mockCoin;
-	
+
 	@Mock
 	StatusUpdate mockStatusUpdate;
-	
+
 	@InjectMocks
 	CoinService coinService = new CoinService();
 
@@ -47,9 +43,9 @@ public class CoinServiceTest {
 		coins.add(coin);
 		when(mockClient.getCoinGeckoCoinsAPI(10)).thenReturn(coins);
 		List<Cryptocurrency> list = coinService.getAllCoins();
-		assertEquals(list,coins);
+		assertEquals(list, coins);
 	}
-	
+
 	@Test
 	public void test_getCoin() {
 		Cryptocurrency coin = new Cryptocurrency();
@@ -57,7 +53,7 @@ public class CoinServiceTest {
 		Cryptocurrency testCoin = coinService.getCoin("id");
 		assertEquals(testCoin, coin);
 	}
-	
+
 	@Test
 	public void test_get_null_coin() {
 		when(mockClient.getCoinGeckoCoin("id")).thenReturn(null);

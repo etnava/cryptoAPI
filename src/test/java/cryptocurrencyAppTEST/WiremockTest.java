@@ -38,7 +38,7 @@ public class WiremockTest { // Rename CoinTest
 	}
 
 	/*
-	 * Method 
+	 * Method
 	 */
 	private void configureStubBitcoin() {
 		stubFor(get(urlPathMatching("/.*")).willReturn(
@@ -54,7 +54,6 @@ public class WiremockTest { // Rename CoinTest
 		stubFor(get(urlPathMatching("/.*")).willReturn(aResponse().withStatus(404)));
 	}
 
-	
 	@Test
 	public void testAllCoins() {
 

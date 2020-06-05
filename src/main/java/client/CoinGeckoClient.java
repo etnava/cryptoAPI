@@ -5,14 +5,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.servlet.http.HttpServletResponse;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.client.RestTemplate;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -38,12 +35,13 @@ public class CoinGeckoClient {
 
 	public CoinGeckoClient() {
 	}
-	
+
 	// Gets Coin Gecko Coins API
 	public List<Cryptocurrency> getCoinGeckoCoinsAPI(int numCoins) {
 		String coinsURL = String.format(MULTIPLE_COINS_URL, numCoins);
 		String allCoinsJSON = getJSON(coinsURL);
-		TypeReference<List<Cryptocurrency>> type = new TypeReference<List<Cryptocurrency>>() {};
+		TypeReference<List<Cryptocurrency>> type = new TypeReference<List<Cryptocurrency>>() {
+		};
 		List<Cryptocurrency> currenciesList = null;
 		try {
 			currenciesList = objectMapper.readValue(allCoinsJSON, type);
@@ -59,7 +57,8 @@ public class CoinGeckoClient {
 	public HashMap<String, List<StatusUpdate>> getCoinGeckoStatusUpdateMapAPI(Cryptocurrency currency) {
 		String currencyURL = String.format(STATUS_UPDATE_URL, currency.getId());
 		String statusUpdateJSON = getJSON(currencyURL);
-		TypeReference<HashMap<String, List<StatusUpdate>>> type = new TypeReference<HashMap<String, List<StatusUpdate>>>() {};
+		TypeReference<HashMap<String, List<StatusUpdate>>> type = new TypeReference<HashMap<String, List<StatusUpdate>>>() {
+		};
 		HashMap<String, List<StatusUpdate>> map = null;
 		try {
 			map = objectMapper.readValue(statusUpdateJSON, type);
@@ -80,9 +79,10 @@ public class CoinGeckoClient {
 	public Cryptocurrency getCoinGeckoCoin(String id) {
 		String coinURL = String.format(SINGLE_COIN_URL, id);
 		String coinJSON = getJSON(coinURL);
-		TypeReference<ArrayList<Cryptocurrency>> type = new TypeReference<ArrayList<Cryptocurrency>>() {};
+		TypeReference<ArrayList<Cryptocurrency>> type = new TypeReference<ArrayList<Cryptocurrency>>() {
+		};
 		Cryptocurrency c = null;
-		try {	
+		try {
 			List<Cryptocurrency> coins = objectMapper.readValue(coinJSON, type);
 			c = coins.get(0);
 		} catch (JsonMappingException e) {

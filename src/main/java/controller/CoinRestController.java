@@ -18,7 +18,7 @@ import services.CoinService;
 public class CoinRestController {
 
 	@Autowired
-	CoinService coinService;
+	private CoinService coinService;
 
 	@GetMapping
 	public List<Cryptocurrency> getAllCoins() {

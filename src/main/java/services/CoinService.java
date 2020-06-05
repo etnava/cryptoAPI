@@ -14,7 +14,7 @@ import model.Cryptocurrency;
 public class CoinService {
 
 	@Autowired
-	CoinGeckoClient client;
+	private CoinGeckoClient client;
 
 	public CoinService() {
 	}
@@ -28,7 +28,7 @@ public class CoinService {
 	}
 
 	public Cryptocurrency getCoin(String id) {
-		Cryptocurrency c = client.getCoinGeckoCoinAPI(id);
+		Cryptocurrency c = client.getCoinGeckoCoin(id);
 		if (c == null) {
 			return null;
 		}

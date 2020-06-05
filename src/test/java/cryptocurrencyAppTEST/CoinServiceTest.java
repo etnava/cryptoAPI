@@ -53,14 +53,14 @@ public class CoinServiceTest {
 	@Test
 	public void test_getCoin() {
 		Cryptocurrency coin = new Cryptocurrency();
-		when(mockClient.getCoinGeckoCoinAPI("id")).thenReturn(coin);
+		when(mockClient.getCoinGeckoCoin("id")).thenReturn(coin);
 		Cryptocurrency testCoin = coinService.getCoin("id");
 		assertEquals(testCoin, coin);
 	}
 	
 	@Test
 	public void test_get_null_coin() {
-		when(mockClient.getCoinGeckoCoinAPI("id")).thenReturn(null);
+		when(mockClient.getCoinGeckoCoin("id")).thenReturn(null);
 		Cryptocurrency testCoin = coinService.getCoin("id");
 		assertEquals(testCoin, null);
 	}

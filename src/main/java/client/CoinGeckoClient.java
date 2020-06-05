@@ -26,10 +26,10 @@ import model.StatusUpdate;
 public class CoinGeckoClient {
 
 	@Autowired
-	RestTemplate restTemplate;
+	private RestTemplate restTemplate;
 
 	@Autowired
-	ObjectMapper objectMapper;
+	private ObjectMapper objectMapper;
 
 	private final String STATUS_UPDATE_KEY = "status_updates";
 	private final String SINGLE_COIN_URL = "https://api.coingecko.com/api/v3/coins/markets?vs_currency=aud&ids=%s&order=market_cap_desc&per_page=100&page=1&sparkline=false";
@@ -38,15 +38,15 @@ public class CoinGeckoClient {
 
 	public CoinGeckoClient() {
 	}
-
+	
 	// Gets Coin Gecko Coins API
 	public List<Cryptocurrency> getCoinGeckoCoinsAPI(int numCoins) {
 		String coinsURL = String.format(MULTIPLE_COINS_URL, numCoins);
 		String allCoinsJSON = getJSON(coinsURL);
+		TypeReference<List<Cryptocurrency>> type = new TypeReference<List<Cryptocurrency>>() {};
 		List<Cryptocurrency> currenciesList = null;
 		try {
-			currenciesList = objectMapper.readValue(allCoinsJSON, new TypeReference<List<Cryptocurrency>>() {
-			});
+			currenciesList = objectMapper.readValue(allCoinsJSON, type);
 		} catch (JsonMappingException e) {
 			e.printStackTrace();
 		} catch (JsonProcessingException e) {
@@ -59,10 +59,10 @@ public class CoinGeckoClient {
 	public HashMap<String, List<StatusUpdate>> getCoinGeckoStatusUpdateMapAPI(Cryptocurrency currency) {
 		String currencyURL = String.format(STATUS_UPDATE_URL, currency.getId());
 		String statusUpdateJSON = getJSON(currencyURL);
+		TypeReference<HashMap<String, List<StatusUpdate>>> type = new TypeReference<HashMap<String, List<StatusUpdate>>>() {};
 		HashMap<String, List<StatusUpdate>> map = null;
 		try {
-			map = objectMapper.readValue(statusUpdateJSON, new TypeReference<HashMap<String, List<StatusUpdate>>>() {
-			});
+			map = objectMapper.readValue(statusUpdateJSON, type);
 		} catch (JsonMappingException e) {
 			e.printStackTrace();
 		} catch (JsonProcessingException e) {
@@ -77,16 +77,14 @@ public class CoinGeckoClient {
 	}
 
 	// Gets Coin Gecko coin api for single coin
-	public Cryptocurrency getCoinGeckoCoinAPI(String id) {
+	public Cryptocurrency getCoinGeckoCoin(String id) {
 		String coinURL = String.format(SINGLE_COIN_URL, id);
-//		String coinJSON = getJSON(coinURL);
-		String coinJSON = restTemplate.getForObject(coinURL, String.class);
-		List<Cryptocurrency> list = new ArrayList<Cryptocurrency>();
-		Cryptocurrency c = new Cryptocurrency();
-		try {
-			list = objectMapper.readValue(coinJSON, new TypeReference<List<Cryptocurrency>>() {
-			});
-			c = list.get(0);
+		String coinJSON = getJSON(coinURL);
+		TypeReference<ArrayList<Cryptocurrency>> type = new TypeReference<ArrayList<Cryptocurrency>>() {};
+		Cryptocurrency c = null;
+		try {	
+			List<Cryptocurrency> coins = objectMapper.readValue(coinJSON, type);
+			c = coins.get(0);
 		} catch (JsonMappingException e) {
 			e.printStackTrace();
 		} catch (JsonProcessingException e) {
